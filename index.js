@@ -7,32 +7,45 @@ dayjs().format();
 var calendar = require("dayjs/plugin/calendar");
 dayjs.extend(calendar);
 
+var isoWeek = require("dayjs/plugin/isoWeek");
+dayjs.extend(isoWeek);
+
+var utc = require("dayjs/plugin/utc");
+dayjs.extend(utc);
+
 app.get("/api/dates/today", (req, res) => {
-  res.send(dayjs().format("dddd MMM DD, YYYY"));
+  res.status(200).send({ date: dayjs().format("dddd MMM DD, YYYY") });
 });
 
 app.get("/api/dates/tomorrow", (req, res) => {
   const today = dayjs();
   const tomorrow = today.add(1, "day");
-  res.send(tomorrow.format("dddd MMM DD, YYYY"));
+  res.json({ date: tomorrow.format("dddd MMM DD, YYYY") });
 });
 
 app.get("/api/dates/yesterday", (req, res) => {
   const today = dayjs();
   const tomorrow = today.subtract(1, "day");
-  res.send(tomorrow.format("dddd MMM DD, YYYY"));
+  res.json({ date: tomorrow.format("dddd MMM DD, YYYY") });
 });
 
-app.get("/api/day-of-week/", (req, res) => {
-  res.send();
+app.get("/api/day-of-week/:year/:month/:day", (req, res) => {
+  //   const dayOfWeek = dayjs();
+  res.json(dayjs().isoWeekday(7));
 });
 
 app.get("/api/current-time", (req, res) => {
-  res.send();
+  const time = dayjs.utc();
+  time.utc().format();
+  res.json(time);
 });
 
 app.get("/api/timestamp", (req, res) => {
   res.send();
+});
+
+app.use((req, res, next) => {
+  res.status(404).send({ error: "Not found" });
 });
 
 app.listen(config.port, () => {
