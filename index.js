@@ -40,13 +40,13 @@ app.get("/api/day-of-week/:year/:month/:day", (req, res) => {
 
 app.get("/api/current-time", (req, res) => {
   const format = req.query.format;
-  //   const time = dayjs.utc();
-  //   time.utc().format();
-  res.status(200).json({ date: dayjs(format) });
+  res.status(200).json({ date: dayjs(format).format("hh mm s A") });
 });
 
 app.get("/api/timestamp", (req, res) => {
-  res.status(200).send();
+  const timestamp = dayjs().valueOf();
+  const format = req.query.format;
+  res.status(200).json({ date: dayjs(timestamp).format("SSS") });
 });
 
 app.use((req, res, next) => {
