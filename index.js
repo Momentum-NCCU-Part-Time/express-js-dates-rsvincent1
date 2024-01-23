@@ -20,28 +20,33 @@ app.get("/api/dates/today", (req, res) => {
 app.get("/api/dates/tomorrow", (req, res) => {
   const today = dayjs();
   const tomorrow = today.add(1, "day");
-  res.json({ date: tomorrow.format("dddd MMM DD, YYYY") });
+  res.status(200).json({ date: tomorrow.format("dddd MMM DD, YYYY") });
 });
 
 app.get("/api/dates/yesterday", (req, res) => {
   const today = dayjs();
   const tomorrow = today.subtract(1, "day");
-  res.json({ date: tomorrow.format("dddd MMM DD, YYYY") });
+  res.status(200).json({ date: tomorrow.format("dddd MMM DD, YYYY") });
 });
 
 app.get("/api/day-of-week/:year/:month/:day", (req, res) => {
-  //   const dayOfWeek = dayjs();
-  res.json(dayjs().isoWeekday(7));
+  const year = req.params.year;
+  const month = req.params.month;
+  const day = req.params.day;
+  const dayOfWeek = dayjs(year, day, month);
+
+  res.status(200).json({ date: dayOfWeek.format("dddd") });
 });
 
 app.get("/api/current-time", (req, res) => {
-  const time = dayjs.utc();
-  time.utc().format();
-  res.json(time);
+  const format = req.query.format;
+  //   const time = dayjs.utc();
+  //   time.utc().format();
+  res.status(200).json({ date: dayjs(format) });
 });
 
 app.get("/api/timestamp", (req, res) => {
-  res.send();
+  res.status(200).send();
 });
 
 app.use((req, res, next) => {
